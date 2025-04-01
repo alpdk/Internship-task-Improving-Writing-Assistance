@@ -1,10 +1,12 @@
 import argparse
 
+import numpy as np
 import pandas as pd
 
 from transformers import pipeline
 from sklearn.utils import shuffle
 from huggingface_hub import login
+from pathlib import Path
 
 def parse_arguments():
     """
@@ -62,17 +64,27 @@ def main():
     login(token=args.huggingface_token)
     model = pipeline('text-generation', model=args.model_name, device=-1, trust_remote_code=True)
 
-    formal_texts = generate_text(model, "Write a formal English sentence using appropriate language.", args.formal_text_amount, 1)
-    informal_texts = generate_text(model, "Write an informal English sentence using appropriate language.", args.informal_text_amount, 0)
+    formal_data = generate_text(model, "Write a formal English sentence using appropriate language.", args.formal_text_amount, 1)
+    informal_data = generate_text(model, "Write an informal English sentence using appropriate language.", args.informal_text_amount, 0)
 
-    data = formal_texts + informal_texts
+    formal_labels = np.array([1] * len(formal_data))
+    informal_labels = np.array([0] * len(informal_data))
 
-    df = pd.DataFrame(data)
-    df = shuffle(df)
+    res_texts = np.concatenate((formal_data, informal_data))
+    res_labels = np.concatenate((formal_labels, informal_labels))
 
-    df.to_csv(f"src/datasets/{args.dataset_name}.csv", index=False)
+    new_df = pd.DataFrame({
+        'text': res_texts,
+        'label': res_labels
+    })
 
-    print(f"Dataset saved to src/datasets/{args.dataset_name}.csv")
+    new_df = shuffle(new_df)
+
+    save_path = Path(__file__).parent / "datasets" / "generated_datasets" / args.dataset_name
+
+    new_df.to_csv(f"{save_path}", index=False)
+
+    print(f"Dataset saved to src/datasets/{args.dataset_name}")
 
 if __name__ == '__main__':
     main()
