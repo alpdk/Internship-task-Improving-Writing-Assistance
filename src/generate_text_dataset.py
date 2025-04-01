@@ -69,8 +69,8 @@ def main():
     login(token=args.huggingface_token)
     model = pipeline('text-generation', model=args.model_name, device=-1, trust_remote_code=True)
 
-    formal_data = generate_text(model, "Generate me please a sentence, that will be wrote formally in english.", args.formal_text_amount, 1)
-    informal_data = generate_text(model, "Generate me please a sentence, that will be wrote informally in english..", args.informal_text_amount, 0)
+    formal_data = generate_text(model, "Generate me please a sentence, that will be wrote with usage of formal english. Also, wrote only requested sentence, without any additional info.", args.formal_text_amount, 1)
+    informal_data = generate_text(model, "Generate me please a sentence, that will be wrote with usage of informal english. Also, wrote only requested sentence, without any additional info.", args.informal_text_amount, 0)
 
     formal_labels = np.array([1] * len(formal_data))
     informal_labels = np.array([0] * len(informal_data))
