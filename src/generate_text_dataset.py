@@ -8,6 +8,7 @@ from sklearn.utils import shuffle
 from huggingface_hub import login
 from pathlib import Path
 
+
 def parse_arguments():
     """
     Parse command line arguments
@@ -34,6 +35,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
+
 def generate_text(model, prompt, num_samples, label):
     """
     Method to generate texts by prompt
@@ -48,6 +50,9 @@ def generate_text(model, prompt, num_samples, label):
         res (list): list of generated texts
     """
     res = []
+
+    prompt = (f"I want to generate a text with amount of words from 10 to 100. This text should be written in {prompt} english style. "
+              f"Also, generate me an output, that will be containing only requested text, without additional symbols and sentences")
 
     for _ in range(num_samples):
         model_chain = model(prompt, max_length=100, truncation=True)
@@ -69,8 +74,8 @@ def main():
     login(token=args.huggingface_token)
     model = pipeline('text-generation', model=args.model_name, device=-1, trust_remote_code=True)
 
-    formal_data = generate_text(model, "Generate me please a sentence, that will be wrote with usage of formal english. Also, wrote only requested sentence, without any additional info.", args.formal_text_amount, 1)
-    informal_data = generate_text(model, "Generate me please a sentence, that will be wrote with usage of informal english. Also, wrote only requested sentence, without any additional info.", args.informal_text_amount, 0)
+    formal_data = generate_text(model, "formal", args.formal_text_amount, 1)
+    informal_data = generate_text(model, "informal", args.informal_text_amount, 0)
 
     formal_labels = np.array([1] * len(formal_data))
     informal_labels = np.array([0] * len(informal_data))
@@ -90,6 +95,7 @@ def main():
     new_df.to_csv(f"{save_path}", index=False)
 
     print(f"Dataset saved to src/datasets/{args.dataset_name}")
+
 
 if __name__ == '__main__':
     main()
