@@ -51,7 +51,12 @@ def generate_text(model, prompt, num_samples, label):
 
     for _ in range(num_samples):
         model_chain = model(prompt, max_length=100, truncation=True)
-        res.append({"text": model_chain[0]['generated_text'], "label": label})
+        response = model_chain[0]['generated_text']
+
+        if response.startswith(prompt):
+            response = response[len(prompt):].strip()
+
+        res.append({"text": response, "label": label})
 
     return res
 
@@ -64,8 +69,8 @@ def main():
     login(token=args.huggingface_token)
     model = pipeline('text-generation', model=args.model_name, device=-1, trust_remote_code=True)
 
-    formal_data = generate_text(model, "Write a formal English sentence using appropriate language.", args.formal_text_amount, 1)
-    informal_data = generate_text(model, "Write an informal English sentence using appropriate language.", args.informal_text_amount, 0)
+    formal_data = generate_text(model, "Generate me please a sentence, that will be wrote formally in english.", args.formal_text_amount, 1)
+    informal_data = generate_text(model, "Generate me please a sentence, that will be wrote informally in english..", args.informal_text_amount, 0)
 
     formal_labels = np.array([1] * len(formal_data))
     informal_labels = np.array([0] * len(informal_data))
