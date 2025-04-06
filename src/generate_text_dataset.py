@@ -51,23 +51,27 @@ def generate_text(model, prompt, num_samples, label):
     """
     res = []
 
-    prompt = (f"Generate me please a text with no more than 250 words. This text should be written in {prompt} english style. "
-              f"Also, generate me an output, that will be containing only requested text, without additional symbols and sentences")
+    languages = ['German', 'English', 'French', 'Italian', 'Russian']
 
-    for _ in range(num_samples):
-        model_chain = model(prompt,
-                            max_length=150,
-                            truncation=True,
-                            temperature=0.9,
-                            top_p=0.9,
-                            do_sample=True)
+    for language in languages:
+        prompt = (
+            f"Generate me please a text with no more than 150 words. This text should be written in {prompt} {language} style. "
+            f"Also, generate me an output, that will be containing only requested text, without additional symbols and sentences")
 
-        response = model_chain[0]['generated_text']
+        for _ in range(num_samples):
+            model_chain = model(prompt,
+                                max_length=100,
+                                truncation=True,
+                                temperature=0.9,
+                                top_p=0.9,
+                                do_sample=True)
 
-        if response.startswith(prompt):
-            response = response[len(prompt):].strip()
+            response = model_chain[0]['generated_text']
 
-        res.append({"text": response, "label": label})
+            if response.startswith(prompt):
+                response = response[len(prompt):].strip()
+
+            res.append({"text": response, "label": label})
 
     return res
 
