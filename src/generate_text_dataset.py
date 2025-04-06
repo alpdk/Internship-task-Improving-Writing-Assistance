@@ -82,7 +82,7 @@ def main():
     """
     args = parse_arguments()
     login(token=args.huggingface_token)
-    model = pipeline('text-generation', model=args.model_name, device=-1, trust_remote_code=True)
+    model = pipeline('text-generation', model=args.model_name, device="auto", trust_remote_code=True)
 
     formal_data = generate_text(model, "formal", args.formal_text_amount, 1)
     informal_data = generate_text(model, "informal", args.informal_text_amount, 0)
