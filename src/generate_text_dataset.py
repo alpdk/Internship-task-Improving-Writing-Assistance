@@ -55,12 +55,12 @@ def generate_text(model, prompt, num_samples, label):
 
     for language in languages:
         prompt = (
-            f"Generate me please a text with no more than 150 words. This text should be written in {prompt} {language} style. "
+            f"Generate me please a text with no more than 100 words. This text should be written in {prompt} {language} style. "
             f"Also, generate me an output, that will be containing only requested text, without additional symbols and sentences")
 
         for _ in range(num_samples // len(languages)):
             model_chain = model(prompt,
-                                max_length=100,
+                                max_length=150,
                                 truncation=True,
                                 temperature=0.9,
                                 top_p=0.9,
