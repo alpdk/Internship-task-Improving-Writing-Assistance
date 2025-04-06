@@ -1,5 +1,5 @@
 import argparse
-
+import torch
 import numpy as np
 import pandas as pd
 
@@ -82,7 +82,8 @@ def main():
     """
     args = parse_arguments()
     login(token=args.huggingface_token)
-    model = pipeline('text-generation', model=args.model_name, device="auto", trust_remote_code=True)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = pipeline('text-generation', model=args.model_name, device=device, trust_remote_code=True)
 
     formal_data = generate_text(model, "formal", args.formal_text_amount, 1)
     informal_data = generate_text(model, "informal", args.informal_text_amount, 0)
