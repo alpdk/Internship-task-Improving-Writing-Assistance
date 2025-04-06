@@ -4,13 +4,11 @@ from abc import abstractmethod
 class ApproachesTemplate:
     """
     This class will help to make some high level wrapper for all approaches
-    """
 
-    def __init__(self):
-        """
-        Constructor
-        """
-        pass
+    Attributes
+        name (string): name of the approach
+    """
+    name = None
 
     @abstractmethod
     def evaluate_sample(self, data):

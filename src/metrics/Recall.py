@@ -1,7 +1,7 @@
 
 from src.metrics.MetricsTemplate import MetricsTemplate
 
-def Recall(MetricsTemplate):
+class Recall(MetricsTemplate):
     """
     Recall metric
 
@@ -14,14 +14,10 @@ def Recall(MetricsTemplate):
         true_neg (int): number of true negatives results
         false_pos (int): number of false positives results
         false_neg (int): number of false negatives results
+        metric_name (string): name of the metric
     """
 
-    amount_of_true = 0
-    amount_of_false = 0
-    true_pos = 0
-    true_neg = 0
-    false_pos = 0
-    false_neg = 0
+    metric_name = "Recall"
 
     def evaluate_dataset(self):
         """
@@ -31,8 +27,8 @@ def Recall(MetricsTemplate):
             res (float): score of our metrics
         """
         for i in range(self.dataset.shape[0]):
-            answer = self.dataset[i]['label']
-            generated_answer = self.form_approach.evaluate_sample(self.dataset[i])
+            answer = self.dataset.loc[i, 'label']
+            generated_answer = self.form_approach.evaluate_sample(self.dataset.loc[i, 'text'])
 
             if answer == 1:
                 self.amount_of_true += 1
