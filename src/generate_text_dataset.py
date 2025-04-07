@@ -78,6 +78,8 @@ def generate_text(model, prompt, num_samples, label):
             if response.startswith(prompt):
                 response = response[len(prompt):].strip()
 
+            torch.cuda.empty_cache()
+
             res.append({"text": response, "label": label})
 
     return res
