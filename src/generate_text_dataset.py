@@ -51,15 +51,18 @@ def generate_text(model, prompt, num_samples, label):
     """
     res = []
 
-    languages = ['German', 'English', 'French', 'Italian', 'Russian']
+    languages = ['German', 'English', 'French', 'Chinese', 'Russian']
 
     for language in languages:
-        prompt = (
-            f"Generate me please a text with no more than 100 words. Generated text should be written in {language} language with usage of {prompt} style. I want to see ONLY requested text.")
-
+        prompt = f"""
+        Generate me please a text with no more than 100 words. 
+        Generated text should be written in {language} language with usage of {prompt} style. 
+        I want to see ONLY requested text.
+        """
+        
         for _ in range(num_samples // len(languages)):
             model_chain = model(prompt,
-                                max_length=200,
+                                max_length=300,
                                 truncation=True,
                                 temperature=0.9,
                                 top_p=0.9,
