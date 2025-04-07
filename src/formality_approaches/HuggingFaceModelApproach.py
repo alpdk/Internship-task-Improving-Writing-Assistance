@@ -25,7 +25,11 @@ class HuggingFaceModelApproach(ApproachesTemplate):
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         login(token=huggingface_token)
-        self.model = pipeline('text-generation', model=model_name, device=device, trust_remote_code=True)
+        self.model = pipeline('text-classification',
+                              model=model_name,
+                              device=device,
+                              trust_remote_code=True,
+                              prefix=None)
 
     def evaluate_sample(self, sample):
         """

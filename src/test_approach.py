@@ -59,7 +59,7 @@ def load_approach(args):
         case "huggingfacemodelapproach":
             return HuggingFaceModelApproach(args.model_name, args.token)
         case "geminiapproach":
-            return GeminiApproach()
+            return GeminiApproach(args.model_name, args.token)
         case _:
             return None
 
