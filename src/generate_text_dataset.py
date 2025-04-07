@@ -55,9 +55,14 @@ def generate_text(model, prompt, num_samples, label):
 
     for language in languages:
         prompt = f"""
-        Generate me please a text with no more than 100 words. 
-        Generated text should be written in {language} language with usage of {prompt} style. 
-        I want to see ONLY requested text.
+        Generate a concise text in {language} language, written in the style of: "{prompt}".  
+        Follow these rules STRICTLY:
+        1. Length: Exactly 100 words (no more, no less).
+        2. Content: Only the generated text, NO additional commentary, titles, or explanations.
+        3. Style: Adhere closely to the specified style ("{prompt}").
+        4. Language: Use {language} accurately and naturally.
+        
+        Here is the text you MUST generate (100 words, {language}, {prompt} style):
         """
         
         for _ in range(num_samples // len(languages)):
