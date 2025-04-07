@@ -67,7 +67,7 @@ def generate_text(model, prompt, num_samples, label):
         
         for _ in range(num_samples // len(languages)):
             model_chain = model(prompt,
-                                max_length=300,
+                                max_new_tokens=200,
                                 truncation=True,
                                 temperature=0.9,
                                 top_p=0.9,
