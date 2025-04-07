@@ -51,33 +51,32 @@ def generate_text(model, prompt, num_samples, label):
     """
     res = []
 
-    languages = ['German', 'English', 'French', 'Chinese', 'Russian']
+    languages = ['German', 'English', 'French', 'Spanish', 'Russian']
 
     for language in languages:
-        prompt = f"""
+        current_prompt = f"""
         Generate a concise text in {language} language, written in the style of: "{prompt}".  
         Follow these rules STRICTLY:
         1. Length: Exactly 100 words (no more, no less).
-        2. Content: Only the generated text, NO additional commentary, titles, or explanations.
+        2. Content: Only the generated text, NO additional commentary, titles, or explanations. Moreover, there should not be any translations.
         3. Style: Adhere closely to the specified style ("{prompt}").
         4. Language: Use {language} accurately and naturally.
-        
+
         Here is the text you MUST generate (100 words, {language}, {prompt} style):
         """
-        
+
         for _ in range(num_samples // len(languages)):
-            model_chain = model(prompt,
-                                min_new_tokens=150,
-                                max_new_tokens=300,
-                                truncation=True,
+            model_chain = model(current_prompt,
+                                min_new_tokens=100,
+                                max_new_tokens=175,
+                                truncation=False,
                                 temperature=0.9,
-                                top_p=0.9,
                                 do_sample=True)
 
             response = model_chain[0]['generated_text']
 
-            if response.startswith(prompt):
-                response = response[len(prompt):].strip()
+            if response.startswith(current_prompt):
+                response = response[len(current_prompt):].strip()
 
             torch.cuda.empty_cache()
 
