@@ -52,9 +52,9 @@ class SumMetric(MetricsTemplate):
             df = pd.read_csv(eval_path, index_col=0)
 
         for i in range(len(metrics)):
-            if (self.metric_name in df.columns) and (self.form_approach.name in df.index) and (
-                    df.at[self.form_approach.name, self.metric_name] != 0):
-                res += df.at[self.form_approach.name, self.metric_name]
+            if (metrics[i].metric_name in df.columns) and (self.form_approach.name in df.index) and (
+                    df.at[self.form_approach.name, metrics[i].metric_name] != 0):
+                res += df.at[self.form_approach.name, metrics[i].metric_name] * coef[i]
             else:
                 res += metrics[i].evaluate_dataset() * coef[i]
 
