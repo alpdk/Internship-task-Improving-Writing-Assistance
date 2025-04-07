@@ -4,6 +4,7 @@ import pandas as pd
 
 from pathlib import Path
 from datasets import load_dataset
+from sklearn.utils import shuffle
 
 def parse_arguments():
     """
@@ -65,7 +66,7 @@ def main():
         'label': res_labels
     })
 
-    new_df = new_df.sample(frac=1).reset_index(drop=True)
+    new_df = shuffle(new_df)
 
     new_dataset_path = dataset_path / "generated_datasets" / args.new_dataset_name
 
