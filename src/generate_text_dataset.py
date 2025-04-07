@@ -36,7 +36,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def generate_text(model, prompt, num_samples, label):
+def generate_text(model, prompt, num_samples):
     """
     Method to generate texts by prompt
 
@@ -80,7 +80,7 @@ def generate_text(model, prompt, num_samples, label):
 
             torch.cuda.empty_cache()
 
-            res.append({"text": response, "label": label})
+            res.append(response)
 
     return res
 
@@ -94,8 +94,8 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = pipeline('text-generation', model=args.model_name, device=device, trust_remote_code=True)
 
-    formal_data = generate_text(model, "formal", args.formal_text_amount, 1)
-    informal_data = generate_text(model, "informal", args.informal_text_amount, 0)
+    formal_data = generate_text(model, "formal", args.formal_text_amount)
+    informal_data = generate_text(model, "informal", args.informal_text_amount)
 
     formal_labels = np.array([1] * len(formal_data))
     informal_labels = np.array([0] * len(informal_data))
