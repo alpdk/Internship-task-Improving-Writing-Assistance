@@ -2,6 +2,7 @@ import re
 from collections import Counter
 from src.formality_approaches.ApproachesTemplate import ApproachesTemplate
 
+
 class ModelFreeApproach(ApproachesTemplate):
     """
     This class provide formality identification of the text on the based on features related to formal texts
@@ -145,19 +146,19 @@ class ModelFreeApproach(ApproachesTemplate):
             self.formal_score -= len(all_caps)
 
         self.total_features += 1
-    
-    def evaluate_sample(self, text, threshold=0.5):
+
+    def evaluate_sample(self, text, threshold=0.6):
         """
         This method calculate score by every features and in the end return decision about text formality.
-    
+
         Parameters:
             text (string): text to check
-            threshold (float): The score threshold (0-1) to consider text as formal (default: 0.5)
+            threshold (float): The score threshold (0-1) to consider text as formal (default: 0.6)
 
         Returns:
             answer (bool): is text formal or informal based on linguistic features?
         """
-    
+
         if not text.strip():
             return False
 
@@ -165,7 +166,7 @@ class ModelFreeApproach(ApproachesTemplate):
         self.total_features = 0
         self.text = text
         self.words = re.findall(r"\b\w+\b", text.lower())
-    
+
         self.check_contractions()
         self.check_slang()
         self.check_length()
@@ -177,5 +178,5 @@ class ModelFreeApproach(ApproachesTemplate):
         self.check_capslock()
 
         normalized_score = (self.formal_score + self.total_features) / (2 * self.total_features)
-    
-        return normalized_score >= threshold
+
+        return int(normalized_score >= threshold)
